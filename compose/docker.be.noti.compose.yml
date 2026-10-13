@@ -3,7 +3,7 @@ services:
     image: ghcr.io/${IMAGE_OWNER}/occupify-noti:latest
     container_name: occupify-noti
     env_file:
-      - noti.env
+      - ../env/noti.env
     ports:
       - "8184:8184"
     restart: unless-stopped

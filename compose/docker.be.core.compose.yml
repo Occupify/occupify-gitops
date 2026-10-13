@@ -3,7 +3,7 @@ services:
     image: ghcr.io/${IMAGE_OWNER}/occupify-core:latest
     container_name: occupify-core
     env_file:
-      - core.env
+      - ../env/core.env
     ports:
       - "8182:8182"
     restart: unless-stopped

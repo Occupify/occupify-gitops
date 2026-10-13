@@ -3,7 +3,7 @@ services:
     image: ghcr.io/${IMAGE_OWNER}/occupify-identity:latest
     container_name: occupify-identity
     env_file:
-      - identity.env
+      - ../env/identity.env
     ports:
       - "8181:8181"
     restart: unless-stopped

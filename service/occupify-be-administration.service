@@ -5,11 +5,11 @@ Wants=network-online.target
 
 [Service]
 Restart=always
-EnvironmentFile=%h/.config/systemd/user/git-ops/administration.env
+EnvironmentFile=%h/.config/systemd/user/git-ops/env/administration.env
 WorkingDirectory=%h/.config/systemd/user/git-ops
 
-ExecStart=/usr/bin/podman-compose -p occupify-be-administration -f docker.be.administration.compose.yml --env-file administration.env up
-ExecStop=/usr/bin/podman-compose -p occupify-be-administration -f docker.be.administration.compose.yml --env-file administration.env down
+ExecStart=/usr/bin/podman-compose -p occupify-be-administration -f compose/docker.be.administration.compose.yml --env-file env/administration.env up
+ExecStop=/usr/bin/podman-compose -p occupify-be-administration -f compose/docker.be.administration.compose.yml --env-file env/administration.env down
 
 [Install]
 WantedBy=default.target
