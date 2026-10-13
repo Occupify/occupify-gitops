@@ -1,0 +1,14 @@
+[Unit]
+Description=Occupify Infrastructure Service (Postgres & Redis)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Restart=always
+WorkingDirectory=%h/.config/systemd/user/git-ops
+
+ExecStart=/usr/bin/podman-compose -p occupify-infra -f docker.infra.compose.yml --env-file infra.env up
+ExecStop=/usr/bin/podman-compose -p occupify-infra -f docker.infra.compose.yml --env-file infra.env down
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,15 @@
+[Unit]
+Description=Occupify Notification Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Restart=always
+EnvironmentFile=%h/.config/systemd/user/git-ops/noti.env
+WorkingDirectory=%h/.config/systemd/user/git-ops
+
+ExecStart=/usr/bin/podman-compose -p occupify-be-noti -f docker.be.noti.compose.yml --env-file noti.env up
+ExecStop=/usr/bin/podman-compose -p occupify-be-noti -f docker.be.noti.compose.yml --env-file noti.env down
+
+[Install]
+WantedBy=default.target

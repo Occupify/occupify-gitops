@@ -1,0 +1,19 @@
+[Unit]
+Description=Occupify Nginx Reverse Proxy
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=forking
+
+ExecStart=/usr/sbin/nginx -c /home/occupify/.config/systemd/user/git-ops/nginx/default.conf
+ExecReload=/usr/sbin/nginx -s reload -c /home/occupify/.config/systemd/user/git-ops/nginx/default.conf
+ExecStop=/usr/sbin/nginx -s quit -c /home/occupify/.config/systemd/user/git-ops/nginx/default.conf
+
+PIDFile=/home/occupify/.config/systemd/user/git-ops/nginx/run/nginx.pid
+
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
