@@ -1,3 +1,5 @@
+IMAGE_OWNER ?= occupify
+
 .PHONY: network dns-refresh infra nginx be-gateway be-identity be-core be-payment be-noti be-administration be-all
 
 network:
