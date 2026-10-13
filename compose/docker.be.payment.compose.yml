@@ -3,7 +3,7 @@ services:
     image: ghcr.io/${IMAGE_OWNER}/occupify-payment:latest
     container_name: occupify-payment
     env_file:
-      - payment.env
+      - ../env/payment.env
     ports:
       - "8183:8183"
     restart: unless-stopped

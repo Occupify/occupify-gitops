@@ -3,7 +3,7 @@ services:
     image: ghcr.io/${IMAGE_OWNER}/occupify-gateway:latest
     container_name: occupify-gateway
     env_file:
-      - gateway.env
+      - ../env/gateway.env
     ports:
       - "8080:8080"
     restart: unless-stopped
