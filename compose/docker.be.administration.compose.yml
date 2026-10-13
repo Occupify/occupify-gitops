@@ -1,6 +1,6 @@
 services:
   administration:
-    image: ghcr.io/${IMAGE_OWNER}/occupify-administration:latest
+    image: ghcr.io/${IMAGE_OWNER:-occupify}/occupify-administration:latest
     container_name: occupify-administration
     env_file:
       - ../env/administration.env

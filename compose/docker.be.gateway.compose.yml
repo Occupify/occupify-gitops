@@ -1,6 +1,6 @@
 services:
   gateway:
-    image: ghcr.io/${IMAGE_OWNER}/occupify-gateway:latest
+    image: ghcr.io/${IMAGE_OWNER:-occupify}/occupify-gateway:latest
     container_name: occupify-gateway
     env_file:
       - ../env/gateway.env

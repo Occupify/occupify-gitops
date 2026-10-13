@@ -1,6 +1,6 @@
 services:
   payment:
-    image: ghcr.io/${IMAGE_OWNER}/occupify-payment:latest
+    image: ghcr.io/${IMAGE_OWNER:-occupify}/occupify-payment:latest
     container_name: occupify-payment
     env_file:
       - ../env/payment.env

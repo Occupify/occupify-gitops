@@ -1,6 +1,6 @@
 services:
   noti:
-    image: ghcr.io/${IMAGE_OWNER}/occupify-noti:latest
+    image: ghcr.io/${IMAGE_OWNER:-occupify}/occupify-noti:latest
     container_name: occupify-noti
     env_file:
       - ../env/noti.env
