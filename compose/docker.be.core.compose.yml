@@ -1,6 +1,6 @@
 services:
   core:
-    image: ghcr.io/${IMAGE_OWNER:-occupify}/occupify-core:latest
+    image: ghcr.io/occupify/occupify-core:latest
     container_name: occupify-core
     env_file:
       - ../env/core.env
