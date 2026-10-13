@@ -23,7 +23,7 @@ nginx:
 
 be-gateway: network dns-refresh
 	@echo ">> Pulling occupify-gateway image..."
-	podman pull ghcr.io/${IMAGE_OWNER}/occupify-gateway:latest
+	podman pull ghcr.io/occupify/occupify-gateway:latest
 	@echo ">> Triggering Systemd Service for Gateway..."
 	systemctl --user daemon-reload
 	systemctl --user restart occupify-be-gateway
@@ -32,7 +32,7 @@ be-gateway: network dns-refresh
 
 be-identity: network dns-refresh
 	@echo ">> Pulling occupify-identity image..."
-	podman pull ghcr.io/${IMAGE_OWNER}/occupify-identity:latest
+	podman pull ghcr.io/occupify/occupify-identity:latest
 	@echo ">> Triggering Systemd Service for Identity..."
 	systemctl --user daemon-reload
 	systemctl --user restart occupify-be-identity
@@ -41,7 +41,7 @@ be-identity: network dns-refresh
 
 be-core: network dns-refresh
 	@echo ">> Pulling occupify-core image..."
-	podman pull ghcr.io/${IMAGE_OWNER}/occupify-core:latest
+	podman pull ghcr.io/occupify/occupify-core:latest
 	@echo ">> Triggering Systemd Service for Core..."
 	systemctl --user daemon-reload
 	systemctl --user restart occupify-be-core
@@ -50,7 +50,7 @@ be-core: network dns-refresh
 
 be-payment: network dns-refresh
 	@echo ">> Pulling occupify-payment image..."
-	podman pull ghcr.io/${IMAGE_OWNER}/occupify-payment:latest
+	podman pull ghcr.io/occupify/occupify-payment:latest
 	@echo ">> Triggering Systemd Service for Payment..."
 	systemctl --user daemon-reload
 	systemctl --user restart occupify-be-payment
@@ -59,7 +59,7 @@ be-payment: network dns-refresh
 
 be-noti: network dns-refresh
 	@echo ">> Pulling occupify-noti image..."
-	podman pull ghcr.io/${IMAGE_OWNER}/occupify-noti:latest
+	podman pull ghcr.io/occupify/occupify-noti:latest
 	@echo ">> Triggering Systemd Service for Notification..."
 	systemctl --user daemon-reload
 	systemctl --user restart occupify-be-noti
@@ -68,7 +68,7 @@ be-noti: network dns-refresh
 
 be-administration: network dns-refresh
 	@echo ">> Pulling occupify-administration image..."
-	podman pull ghcr.io/${IMAGE_OWNER}/occupify-administration:latest
+	podman pull ghcr.io/occupify/occupify-administration:latest
 	@echo ">> Triggering Systemd Service for Administration..."
 	systemctl --user daemon-reload
 	systemctl --user restart occupify-be-administration

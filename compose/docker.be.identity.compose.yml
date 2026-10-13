@@ -1,6 +1,6 @@
 services:
   identity:
-    image: ghcr.io/${IMAGE_OWNER}/occupify-identity:latest
+    image: ghcr.io/occupify/occupify-identity:latest
     container_name: occupify-identity
     env_file:
       - ../env/identity.env
