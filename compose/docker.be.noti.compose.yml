@@ -1,0 +1,15 @@
+services:
+  noti:
+    image: ghcr.io/${IMAGE_OWNER}/occupify-noti:latest
+    container_name: occupify-noti
+    env_file:
+      - noti.env
+    ports:
+      - "8184:8184"
+    restart: unless-stopped
+    networks:
+      - occupify-network
+
+networks:
+  occupify-network:
+    external: true

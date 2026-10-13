@@ -1,0 +1,15 @@
+services:
+  payment:
+    image: ghcr.io/${IMAGE_OWNER}/occupify-payment:latest
+    container_name: occupify-payment
+    env_file:
+      - payment.env
+    ports:
+      - "8183:8183"
+    restart: unless-stopped
+    networks:
+      - occupify-network
+
+networks:
+  occupify-network:
+    external: true

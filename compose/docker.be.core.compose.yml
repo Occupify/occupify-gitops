@@ -1,0 +1,15 @@
+services:
+  core:
+    image: ghcr.io/${IMAGE_OWNER}/occupify-core:latest
+    container_name: occupify-core
+    env_file:
+      - core.env
+    ports:
+      - "8182:8182"
+    restart: unless-stopped
+    networks:
+      - occupify-network
+
+networks:
+  occupify-network:
+    external: true

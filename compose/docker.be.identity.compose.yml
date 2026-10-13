@@ -1,0 +1,15 @@
+services:
+  identity:
+    image: ghcr.io/${IMAGE_OWNER}/occupify-identity:latest
+    container_name: occupify-identity
+    env_file:
+      - identity.env
+    ports:
+      - "8181:8181"
+    restart: unless-stopped
+    networks:
+      - occupify-network
+
+networks:
+  occupify-network:
+    external: true

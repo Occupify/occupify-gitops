@@ -1,0 +1,15 @@
+services:
+  administration:
+    image: ghcr.io/${IMAGE_OWNER}/occupify-administration:latest
+    container_name: occupify-administration
+    env_file:
+      - administration.env
+    ports:
+      - "8185:8185"
+    restart: unless-stopped
+    networks:
+      - occupify-network
+
+networks:
+  occupify-network:
+    external: true

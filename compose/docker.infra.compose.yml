@@ -1,0 +1,97 @@
+services:
+  postgres-identity:
+    image: docker.io/library/postgres:16-alpine
+    container_name: occupify-postgres-identity
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: occupify_identity
+      POSTGRES_USER: ${IDENTITY_DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${IDENTITY_DB_PASSWORD:-postgres}
+    ports:
+      - "5530:5432"
+    volumes:
+      - postgres_identity_data:/var/lib/postgresql/data
+    networks:
+      - occupify-network
+
+  redis:
+    image: docker.io/library/redis:7-alpine
+    container_name: occupify-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    networks:
+      - occupify-network
+
+  postgres-core:
+    image: docker.io/library/postgres:16-alpine
+    container_name: occupify-postgres-core
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: occupify_core
+      POSTGRES_USER: ${CORE_DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${CORE_DB_PASSWORD:-postgres}
+    ports:
+      - "5531:5432"
+    volumes:
+      - postgres_core_data:/var/lib/postgresql/data
+    networks:
+      - occupify-network
+
+  postgres-payment:
+    image: docker.io/library/postgres:16-alpine
+    container_name: occupify-postgres-payment
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: occupify_payment
+      POSTGRES_USER: ${PAYMENT_DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${PAYMENT_DB_PASSWORD:-postgres}
+    ports:
+      - "5532:5432"
+    volumes:
+      - postgres_payment_data:/var/lib/postgresql/data
+    networks:
+      - occupify-network
+
+  postgres-administration:
+    image: docker.io/library/postgres:16-alpine
+    container_name: occupify-postgres-administration
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: occupify_administration
+      POSTGRES_USER: ${ADMINISTRATION_DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${ADMINISTRATION_DB_PASSWORD:-postgres}
+    ports:
+      - "5533:5432"
+    volumes:
+      - postgres_admin_data:/var/lib/postgresql/data
+    networks:
+      - occupify-network
+
+  postgres-noti:
+    image: docker.io/library/postgres:16-alpine
+    container_name: occupify-postgres-noti
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: occupify_noti
+      POSTGRES_USER: ${NOTI_DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${NOTI_DB_PASSWORD:-postgres}
+    ports:
+      - "5534:5432"
+    volumes:
+      - postgres_noti_data:/var/lib/postgresql/data
+    networks:
+      - occupify-network
+
+volumes:
+  postgres_identity_data:
+  postgres_core_data:
+  postgres_payment_data:
+  postgres_admin_data:
+  postgres_noti_data:
+  redis_data:
+
+networks:
+  occupify-network:
+    external: true
