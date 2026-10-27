@@ -107,6 +107,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@occupify.vn}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-Password123}
       SCRIPT_NAME: /pgadmin
+      PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: 'False'
     ports:
       - "127.0.0.1:5050:80"
     volumes:
