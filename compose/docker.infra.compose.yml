@@ -100,7 +100,7 @@ services:
       - occupify-network
 
   pgadmin:
-    image: dpage/pgadmin4:latest
+    image: docker.io/dpage/pgadmin4:latest
     container_name: occupify-pgadmin
     restart: unless-stopped
     environment:
