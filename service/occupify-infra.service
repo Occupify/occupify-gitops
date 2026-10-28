@@ -7,6 +7,7 @@ Wants=network-online.target
 Restart=always
 WorkingDirectory=%h/.config/systemd/user/git-ops
 
+ExecStartPre=-/usr/bin/podman rm -f occupify-gateway
 ExecStart=/usr/bin/podman-compose -p occupify-infra -f compose/docker.infra.compose.yml --env-file env/infra.env up
 ExecStop=/usr/bin/podman-compose -p occupify-infra -f compose/docker.infra.compose.yml --env-file env/infra.env down
 
