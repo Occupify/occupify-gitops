@@ -111,7 +111,7 @@ services:
     ports:
       - "127.0.0.1:5050:80"
     volumes:
-      - pgadmin_data:/var/lib/pgadmin
+      - pgadmin_data:/var/lib/pgadmin:U
     networks:
       - occupify-network
 
