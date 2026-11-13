@@ -6,6 +6,24 @@ services:
       - ../env/agentic.env
     ports:
       - "8186:8186"
+    depends_on:
+      - cv-compiler
+    restart: unless-stopped
+    networks:
+      - occupify-network
+
+  cv-compiler:
+    image: ghcr.io/occupify/occupify-cv-compiler:latest
+    container_name: occupify-cv-compiler
+    read_only: true
+    tmpfs: [/tmp:size=256m]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 64
+    mem_limit: 768m
+    cpus: 2
+    ports:
+      - "127.0.0.1:8190:8190"
     restart: unless-stopped
     networks:
       - occupify-network
