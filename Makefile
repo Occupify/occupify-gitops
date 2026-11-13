@@ -78,11 +78,14 @@ be-administration: network dns-refresh
 be-agentic: network dns-refresh
 	@echo ">> Pulling occupify-agentic image..."
 	podman pull ghcr.io/occupify/occupify-agentic:latest
+	@echo ">> Pulling occupify-cv-compiler image..."
+	podman pull ghcr.io/occupify/occupify-cv-compiler:latest
 	@echo ">> Triggering Systemd Service for Agentic..."
 	systemctl --user daemon-reload
 	systemctl --user restart occupify-be-agentic
 	@sleep 3
 	@podman ps | grep occupify-agentic || true
+	@podman ps | grep occupify-cv-compiler || true
 	@echo ">> Restarting API Gateway..."
 	podman restart occupify-gateway || true
 
