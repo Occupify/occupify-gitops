@@ -84,6 +84,21 @@ services:
     networks:
       - occupify-network
 
+  postgres-agentic:
+    image: docker.io/pgvector/pgvector:pg16
+    container_name: occupify-postgres-agentic
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: occupify_agentic
+      POSTGRES_USER: ${AGENTIC_DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${AGENTIC_DB_PASSWORD:-postgres}
+    ports:
+      - "5535:5432"
+    volumes:
+      - postgres_agentic_data:/var/lib/postgresql/data
+    networks:
+      - occupify-network
+
   rabbitmq:
     image: docker.io/library/rabbitmq:3.13-management-alpine
     container_name: occupify-rabbitmq
@@ -123,6 +138,7 @@ volumes:
   postgres_payment_data:
   postgres_admin_data:
   postgres_noti_data:
+  postgres_agentic_data:
   redis_data:
   rabbitmq_data:
   pgadmin_data:

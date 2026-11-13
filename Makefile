@@ -1,4 +1,4 @@
-.PHONY: network dns-refresh infra nginx be-gateway be-identity be-core be-payment be-noti be-administration be-all
+.PHONY: network dns-refresh infra nginx be-gateway be-identity be-core be-payment be-noti be-administration be-agentic be-all
 
 network:
 	@podman network exists occupify-network || podman network create occupify-network
@@ -75,4 +75,15 @@ be-administration: network dns-refresh
 	@sleep 3
 	@podman ps | grep occupify-administration || true
 
-be-all: be-gateway be-identity be-core be-payment be-noti be-administration
+be-agentic: network dns-refresh
+	@echo ">> Pulling occupify-agentic image..."
+	podman pull ghcr.io/occupify/occupify-agentic:latest
+	@echo ">> Triggering Systemd Service for Agentic..."
+	systemctl --user daemon-reload
+	systemctl --user restart occupify-be-agentic
+	@sleep 3
+	@podman ps | grep occupify-agentic || true
+	@echo ">> Restarting API Gateway..."
+	podman restart occupify-gateway || true
+
+be-all: be-gateway be-identity be-core be-payment be-noti be-administration be-agentic

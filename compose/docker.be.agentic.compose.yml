@@ -1,0 +1,15 @@
+services:
+  agentic:
+    image: ghcr.io/occupify/occupify-agentic:latest
+    container_name: occupify-agentic
+    env_file:
+      - ../env/agentic.env
+    ports:
+      - "8186:8186"
+    restart: unless-stopped
+    networks:
+      - occupify-network
+
+networks:
+  occupify-network:
+    external: true
