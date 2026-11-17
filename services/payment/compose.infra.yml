@@ -1,0 +1,22 @@
+services:
+  postgres-payment:
+    image: docker.io/library/postgres:16-alpine
+    container_name: occupify-postgres-payment
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: occupify_payment
+      POSTGRES_USER: ${PAYMENT_DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${PAYMENT_DB_PASSWORD:-postgres}
+    ports:
+      - "5532:5432"
+    volumes:
+      - postgres_payment_data:/var/lib/postgresql/data
+    networks:
+      - occupify-network
+
+volumes:
+  postgres_payment_data:
+
+networks:
+  occupify-network:
+    external: true
