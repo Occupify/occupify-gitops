@@ -3,7 +3,7 @@ services:
     image: ghcr.io/occupify/occupify-administration:latest
     container_name: occupify-administration
     env_file:
-      - ../env/administration.env
+      - ../../env/administration.env
     ports:
       - "8185:8185"
     restart: unless-stopped

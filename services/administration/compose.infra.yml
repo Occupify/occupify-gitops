@@ -1,0 +1,22 @@
+services:
+  postgres-administration:
+    image: docker.io/library/postgres:16-alpine
+    container_name: occupify-postgres-administration
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: occupify_administration
+      POSTGRES_USER: ${ADMINISTRATION_DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${ADMINISTRATION_DB_PASSWORD:-postgres}
+    ports:
+      - "5533:5432"
+    volumes:
+      - postgres_admin_data:/var/lib/postgresql/data
+    networks:
+      - occupify-network
+
+volumes:
+  postgres_admin_data:
+
+networks:
+  occupify-network:
+    external: true
