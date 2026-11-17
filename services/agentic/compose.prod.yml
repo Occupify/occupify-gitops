@@ -3,7 +3,7 @@ services:
     image: ghcr.io/occupify/occupify-agentic:latest
     container_name: occupify-agentic
     env_file:
-      - ../env/agentic.env
+      - ../../env/agentic.env
     ports:
       - "8186:8186"
     depends_on:

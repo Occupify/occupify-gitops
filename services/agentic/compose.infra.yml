@@ -1,0 +1,22 @@
+services:
+  postgres-agentic:
+    image: docker.io/pgvector/pgvector:pg16
+    container_name: occupify-postgres-agentic
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: occupify_agentic
+      POSTGRES_USER: ${AGENTIC_DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${AGENTIC_DB_PASSWORD:-postgres}
+    ports:
+      - "5535:5432"
+    volumes:
+      - postgres_agentic_data:/var/lib/postgresql/data
+    networks:
+      - occupify-network
+
+volumes:
+  postgres_agentic_data:
+
+networks:
+  occupify-network:
+    external: true
