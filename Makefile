@@ -13,43 +13,43 @@ dns-refresh:
 	@pkill -u "$$(id -u)" aardvark-dns || true
 
 sync-shared:
-	@mkdir -p $$HOME/.config/systemd/user/git-ops/services/shared
-	@cp -rf services/shared/* $$HOME/.config/systemd/user/git-ops/services/shared/ 2>/dev/null || true
+	@mkdir -p $$HOME/.config/systemd/user/git-ops/compose/shared
+	@cp -rf compose/shared/* $$HOME/.config/systemd/user/git-ops/compose/shared/ 2>/dev/null || true
 	@cp -f service/occupify-infra-shared.service $$HOME/.config/systemd/user/ 2>/dev/null || true
 
 sync-identity:
-	@mkdir -p $$HOME/.config/systemd/user/git-ops/services/identity
-	@cp -rf services/identity/* $$HOME/.config/systemd/user/git-ops/services/identity/ 2>/dev/null || true
+	@mkdir -p $$HOME/.config/systemd/user/git-ops/compose/identity
+	@cp -rf compose/identity/* $$HOME/.config/systemd/user/git-ops/compose/identity/ 2>/dev/null || true
 	@cp -f service/occupify-*-identity.service $$HOME/.config/systemd/user/ 2>/dev/null || true
 
 sync-core:
-	@mkdir -p $$HOME/.config/systemd/user/git-ops/services/core
-	@cp -rf services/core/* $$HOME/.config/systemd/user/git-ops/services/core/ 2>/dev/null || true
+	@mkdir -p $$HOME/.config/systemd/user/git-ops/compose/core
+	@cp -rf compose/core/* $$HOME/.config/systemd/user/git-ops/compose/core/ 2>/dev/null || true
 	@cp -f service/occupify-*-core.service $$HOME/.config/systemd/user/ 2>/dev/null || true
 
 sync-payment:
-	@mkdir -p $$HOME/.config/systemd/user/git-ops/services/payment
-	@cp -rf services/payment/* $$HOME/.config/systemd/user/git-ops/services/payment/ 2>/dev/null || true
+	@mkdir -p $$HOME/.config/systemd/user/git-ops/compose/payment
+	@cp -rf compose/payment/* $$HOME/.config/systemd/user/git-ops/compose/payment/ 2>/dev/null || true
 	@cp -f service/occupify-*-payment.service $$HOME/.config/systemd/user/ 2>/dev/null || true
 
 sync-noti:
-	@mkdir -p $$HOME/.config/systemd/user/git-ops/services/noti
-	@cp -rf services/noti/* $$HOME/.config/systemd/user/git-ops/services/noti/ 2>/dev/null || true
+	@mkdir -p $$HOME/.config/systemd/user/git-ops/compose/noti
+	@cp -rf compose/noti/* $$HOME/.config/systemd/user/git-ops/compose/noti/ 2>/dev/null || true
 	@cp -f service/occupify-*-noti.service $$HOME/.config/systemd/user/ 2>/dev/null || true
 
 sync-administration:
-	@mkdir -p $$HOME/.config/systemd/user/git-ops/services/administration
-	@cp -rf services/administration/* $$HOME/.config/systemd/user/git-ops/services/administration/ 2>/dev/null || true
+	@mkdir -p $$HOME/.config/systemd/user/git-ops/compose/administration
+	@cp -rf compose/administration/* $$HOME/.config/systemd/user/git-ops/compose/administration/ 2>/dev/null || true
 	@cp -f service/occupify-*-administration.service $$HOME/.config/systemd/user/ 2>/dev/null || true
 
 sync-agentic:
-	@mkdir -p $$HOME/.config/systemd/user/git-ops/services/agentic
-	@cp -rf services/agentic/* $$HOME/.config/systemd/user/git-ops/services/agentic/ 2>/dev/null || true
+	@mkdir -p $$HOME/.config/systemd/user/git-ops/compose/agentic
+	@cp -rf compose/agentic/* $$HOME/.config/systemd/user/git-ops/compose/agentic/ 2>/dev/null || true
 	@cp -f service/occupify-*-agentic.service $$HOME/.config/systemd/user/ 2>/dev/null || true
 
 sync-gateway:
-	@mkdir -p $$HOME/.config/systemd/user/git-ops/services/gateway
-	@cp -rf services/gateway/* $$HOME/.config/systemd/user/git-ops/services/gateway/ 2>/dev/null || true
+	@mkdir -p $$HOME/.config/systemd/user/git-ops/compose/gateway
+	@cp -rf compose/gateway/* $$HOME/.config/systemd/user/git-ops/compose/gateway/ 2>/dev/null || true
 	@cp -f service/occupify-be-gateway.service $$HOME/.config/systemd/user/ 2>/dev/null || true
 
 sync-all: sync-shared sync-identity sync-core sync-payment sync-noti sync-administration sync-agentic sync-gateway
