@@ -49,8 +49,11 @@ sync-agentic:
 
 sync-gateway:
 	@mkdir -p $$HOME/.config/systemd/user/git-ops/compose/gateway
+	@mkdir -p $$HOME/.config/systemd/user/git-ops/nginx/logs $$HOME/.config/systemd/user/git-ops/nginx/run $$HOME/.config/systemd/user/git-ops/nginx/body
 	@cp -rf compose/gateway/* $$HOME/.config/systemd/user/git-ops/compose/gateway/ 2>/dev/null || true
 	@cp -f service/occupify-be-gateway.service $$HOME/.config/systemd/user/ 2>/dev/null || true
+	@cp -f service/occupify-nginx.service $$HOME/.config/systemd/user/ 2>/dev/null || true
+	@cp -f nginx/default.conf $$HOME/.config/systemd/user/git-ops/nginx/default.conf 2>/dev/null || true
 
 sync-all: sync-shared sync-identity sync-core sync-payment sync-noti sync-administration sync-agentic sync-gateway
 
