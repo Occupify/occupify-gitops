@@ -1,4 +1,6 @@
-.PHONY: network dns-refresh sync-manifests infra infra-all infra-shared \
+.PHONY: network dns-refresh \
+        sync-shared sync-identity sync-core sync-payment sync-noti sync-administration sync-agentic sync-gateway sync-all \
+        infra infra-all infra-shared \
         infra-identity infra-core infra-payment infra-noti infra-administration infra-agentic \
         identity core payment noti administration agentic gateway nginx \
         be-gateway be-identity be-core be-payment be-noti be-administration be-agentic be-all all
@@ -10,12 +12,49 @@ dns-refresh:
 	@echo ">> Refreshing Aardvark DNS daemon..."
 	@pkill -u "$$(id -u)" aardvark-dns || true
 
-sync-manifests:
-	@mkdir -p $$HOME/.config/systemd/user/git-ops/services
-	@cp -rf services/* $$HOME/.config/systemd/user/git-ops/services/ 2>/dev/null || true
-	@cp -f service/occupify-*.service $$HOME/.config/systemd/user/ 2>/dev/null || true
+sync-shared:
+	@mkdir -p $$HOME/.config/systemd/user/git-ops/services/shared
+	@cp -rf services/shared/* $$HOME/.config/systemd/user/git-ops/services/shared/ 2>/dev/null || true
+	@cp -f service/occupify-infra-shared.service $$HOME/.config/systemd/user/ 2>/dev/null || true
 
-infra-shared: network dns-refresh sync-manifests
+sync-identity:
+	@mkdir -p $$HOME/.config/systemd/user/git-ops/services/identity
+	@cp -rf services/identity/* $$HOME/.config/systemd/user/git-ops/services/identity/ 2>/dev/null || true
+	@cp -f service/occupify-*-identity.service $$HOME/.config/systemd/user/ 2>/dev/null || true
+
+sync-core:
+	@mkdir -p $$HOME/.config/systemd/user/git-ops/services/core
+	@cp -rf services/core/* $$HOME/.config/systemd/user/git-ops/services/core/ 2>/dev/null || true
+	@cp -f service/occupify-*-core.service $$HOME/.config/systemd/user/ 2>/dev/null || true
+
+sync-payment:
+	@mkdir -p $$HOME/.config/systemd/user/git-ops/services/payment
+	@cp -rf services/payment/* $$HOME/.config/systemd/user/git-ops/services/payment/ 2>/dev/null || true
+	@cp -f service/occupify-*-payment.service $$HOME/.config/systemd/user/ 2>/dev/null || true
+
+sync-noti:
+	@mkdir -p $$HOME/.config/systemd/user/git-ops/services/noti
+	@cp -rf services/noti/* $$HOME/.config/systemd/user/git-ops/services/noti/ 2>/dev/null || true
+	@cp -f service/occupify-*-noti.service $$HOME/.config/systemd/user/ 2>/dev/null || true
+
+sync-administration:
+	@mkdir -p $$HOME/.config/systemd/user/git-ops/services/administration
+	@cp -rf services/administration/* $$HOME/.config/systemd/user/git-ops/services/administration/ 2>/dev/null || true
+	@cp -f service/occupify-*-administration.service $$HOME/.config/systemd/user/ 2>/dev/null || true
+
+sync-agentic:
+	@mkdir -p $$HOME/.config/systemd/user/git-ops/services/agentic
+	@cp -rf services/agentic/* $$HOME/.config/systemd/user/git-ops/services/agentic/ 2>/dev/null || true
+	@cp -f service/occupify-*-agentic.service $$HOME/.config/systemd/user/ 2>/dev/null || true
+
+sync-gateway:
+	@mkdir -p $$HOME/.config/systemd/user/git-ops/services/gateway
+	@cp -rf services/gateway/* $$HOME/.config/systemd/user/git-ops/services/gateway/ 2>/dev/null || true
+	@cp -f service/occupify-be-gateway.service $$HOME/.config/systemd/user/ 2>/dev/null || true
+
+sync-all: sync-shared sync-identity sync-core sync-payment sync-noti sync-administration sync-agentic sync-gateway
+
+infra-shared: network dns-refresh sync-shared
 	@if podman ps --format '{{.Names}}' | grep -qw 'occupify-rabbitmq' && \
 	    podman ps --format '{{.Names}}' | grep -qw 'occupify-redis' && \
 	    podman ps --format '{{.Names}}' | grep -qw 'occupify-pgadmin'; then \
@@ -28,7 +67,7 @@ infra-shared: network dns-refresh sync-manifests
 		podman ps | grep -E "occupify-rabbitmq|occupify-redis|occupify-pgadmin" || true; \
 	fi
 
-infra-identity: network dns-refresh sync-manifests
+infra-identity: network dns-refresh sync-identity
 	@if podman ps --format '{{.Names}}' | grep -qw 'occupify-postgres-identity'; then \
 		echo ">> Identity infra (occupify-postgres-identity) is already running, skipping..."; \
 	else \
@@ -39,7 +78,7 @@ infra-identity: network dns-refresh sync-manifests
 		podman ps | grep occupify-postgres-identity || true; \
 	fi
 
-infra-core: network dns-refresh sync-manifests
+infra-core: network dns-refresh sync-core
 	@if podman ps --format '{{.Names}}' | grep -qw 'occupify-postgres-core'; then \
 		echo ">> Core infra (occupify-postgres-core) is already running, skipping..."; \
 	else \
@@ -50,7 +89,7 @@ infra-core: network dns-refresh sync-manifests
 		podman ps | grep occupify-postgres-core || true; \
 	fi
 
-infra-payment: network dns-refresh sync-manifests
+infra-payment: network dns-refresh sync-payment
 	@if podman ps --format '{{.Names}}' | grep -qw 'occupify-postgres-payment'; then \
 		echo ">> Payment infra (occupify-postgres-payment) is already running, skipping..."; \
 	else \
@@ -61,7 +100,7 @@ infra-payment: network dns-refresh sync-manifests
 		podman ps | grep occupify-postgres-payment || true; \
 	fi
 
-infra-noti: network dns-refresh sync-manifests
+infra-noti: network dns-refresh sync-noti
 	@if podman ps --format '{{.Names}}' | grep -qw 'occupify-postgres-noti'; then \
 		echo ">> Notification infra (occupify-postgres-noti) is already running, skipping..."; \
 	else \
@@ -72,7 +111,7 @@ infra-noti: network dns-refresh sync-manifests
 		podman ps | grep occupify-postgres-noti || true; \
 	fi
 
-infra-administration: network dns-refresh sync-manifests
+infra-administration: network dns-refresh sync-administration
 	@if podman ps --format '{{.Names}}' | grep -qw 'occupify-postgres-administration'; then \
 		echo ">> Administration infra (occupify-postgres-administration) is already running, skipping..."; \
 	else \
@@ -83,7 +122,7 @@ infra-administration: network dns-refresh sync-manifests
 		podman ps | grep occupify-postgres-administration || true; \
 	fi
 
-infra-agentic: network dns-refresh sync-manifests
+infra-agentic: network dns-refresh sync-agentic
 	@if podman ps --format '{{.Names}}' | grep -qw 'occupify-postgres-agentic'; then \
 		echo ">> Agentic infra (occupify-postgres-agentic) is already running, skipping..."; \
 	else \
@@ -107,7 +146,7 @@ nginx:
 
 gateway: infra-shared be-gateway
 
-be-gateway: network dns-refresh sync-manifests
+be-gateway: network dns-refresh sync-gateway
 	@echo ">> Pulling occupify-gateway image..."
 	podman pull ghcr.io/occupify/occupify-gateway:latest
 	@echo ">> Triggering Systemd Service for Gateway..."
@@ -118,7 +157,7 @@ be-gateway: network dns-refresh sync-manifests
 
 identity: infra-identity be-identity
 
-be-identity: network dns-refresh sync-manifests
+be-identity: network dns-refresh sync-identity
 	@echo ">> Pulling occupify-identity image..."
 	podman pull ghcr.io/occupify/occupify-identity:latest
 	@echo ">> Triggering Systemd Service for Identity..."
@@ -129,7 +168,7 @@ be-identity: network dns-refresh sync-manifests
 
 core: infra-core be-core
 
-be-core: network dns-refresh sync-manifests
+be-core: network dns-refresh sync-core
 	@echo ">> Pulling occupify-core image..."
 	podman pull ghcr.io/occupify/occupify-core:latest
 	@echo ">> Triggering Systemd Service for Core..."
@@ -140,7 +179,7 @@ be-core: network dns-refresh sync-manifests
 
 payment: infra-payment be-payment
 
-be-payment: network dns-refresh sync-manifests
+be-payment: network dns-refresh sync-payment
 	@echo ">> Pulling occupify-payment image..."
 	podman pull ghcr.io/occupify/occupify-payment:latest
 	@echo ">> Triggering Systemd Service for Payment..."
@@ -151,7 +190,7 @@ be-payment: network dns-refresh sync-manifests
 
 noti: infra-noti be-noti
 
-be-noti: network dns-refresh sync-manifests
+be-noti: network dns-refresh sync-noti
 	@echo ">> Pulling occupify-noti image..."
 	podman pull ghcr.io/occupify/occupify-noti:latest
 	@echo ">> Triggering Systemd Service for Notification..."
@@ -162,7 +201,7 @@ be-noti: network dns-refresh sync-manifests
 
 administration: infra-administration be-administration
 
-be-administration: network dns-refresh sync-manifests
+be-administration: network dns-refresh sync-administration
 	@echo ">> Pulling occupify-administration image..."
 	podman pull ghcr.io/occupify/occupify-administration:latest
 	@echo ">> Triggering Systemd Service for Administration..."
@@ -173,7 +212,7 @@ be-administration: network dns-refresh sync-manifests
 
 agentic: infra-agentic be-agentic
 
-be-agentic: network dns-refresh sync-manifests
+be-agentic: network dns-refresh sync-agentic
 	@echo ">> Pulling occupify-agentic image..."
 	podman pull ghcr.io/occupify/occupify-agentic:latest
 	@echo ">> Pulling occupify-cv-compiler image..."
@@ -189,4 +228,4 @@ be-agentic: network dns-refresh sync-manifests
 
 be-all: be-gateway be-identity be-core be-payment be-noti be-administration be-agentic
 
-all: infra-all be-all nginx
+all: sync-all infra-all be-all nginx
