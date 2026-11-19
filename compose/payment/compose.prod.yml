@@ -1,15 +1,23 @@
 services:
+  postgres-payment:
+    image: docker.io/library/postgres:16-alpine
+    container_name: occupify-postgres-payment
+    restart: unless-stopped
+    env_file:
+      - ../../env/payment.env
+    volumes:
+      - postgres_payment_data:/var/lib/postgresql/data
+
   payment:
     image: ghcr.io/occupify/occupify-payment:latest
     container_name: occupify-payment
+    restart: on-failure:3
+    depends_on:
+      - postgres-payment
     env_file:
       - ../../env/payment.env
     ports:
-      - "8183:8183"
-    restart: unless-stopped
-    networks:
-      - occupify-network
+      - "8080:8183"
 
-networks:
-  occupify-network:
-    external: true
+volumes:
+  postgres_payment_data:

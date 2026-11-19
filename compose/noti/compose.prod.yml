@@ -1,15 +1,23 @@
 services:
+  postgres-noti:
+    image: docker.io/library/postgres:16-alpine
+    container_name: occupify-postgres-noti
+    restart: unless-stopped
+    env_file:
+      - ../../env/noti.env
+    volumes:
+      - postgres_noti_data:/var/lib/postgresql/data
+
   noti:
     image: ghcr.io/occupify/occupify-noti:latest
     container_name: occupify-noti
+    restart: on-failure:3
+    depends_on:
+      - postgres-noti
     env_file:
       - ../../env/noti.env
     ports:
-      - "8184:8184"
-    restart: unless-stopped
-    networks:
-      - occupify-network
+      - "8080:8184"
 
-networks:
-  occupify-network:
-    external: true
+volumes:
+  postgres_noti_data:

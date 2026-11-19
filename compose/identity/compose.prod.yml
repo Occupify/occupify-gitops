@@ -1,15 +1,23 @@
 services:
+  postgres-identity:
+    image: docker.io/library/postgres:16-alpine
+    container_name: occupify-postgres-identity
+    restart: unless-stopped
+    env_file:
+      - ../../env/identity.env
+    volumes:
+      - postgres_identity_data:/var/lib/postgresql/data
+
   identity:
     image: ghcr.io/occupify/occupify-identity:latest
     container_name: occupify-identity
+    restart: on-failure:3
+    depends_on:
+      - postgres-identity
     env_file:
       - ../../env/identity.env
     ports:
-      - "8181:8181"
-    restart: unless-stopped
-    networks:
-      - occupify-network
+      - "8080:8181"
 
-networks:
-  occupify-network:
-    external: true
+volumes:
+  postgres_identity_data:

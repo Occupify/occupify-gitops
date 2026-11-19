@@ -1,16 +1,12 @@
 services:
-  agentic:
-    image: ghcr.io/occupify/occupify-agentic:latest
-    container_name: occupify-agentic
+  postgres-agentic:
+    image: docker.io/pgvector/pgvector:pg16
+    container_name: occupify-postgres-agentic
+    restart: unless-stopped
     env_file:
       - ../../env/agentic.env
-    ports:
-      - "8186:8186"
-    depends_on:
-      - cv-compiler
-    restart: unless-stopped
-    networks:
-      - occupify-network
+    volumes:
+      - postgres_agentic_data:/var/lib/postgresql/data
 
   cv-compiler:
     image: ghcr.io/occupify/occupify-cv-compiler:latest
@@ -22,12 +18,19 @@ services:
     pids_limit: 64
     mem_limit: 768m
     cpus: 2
-    ports:
-      - "127.0.0.1:8190:8190"
     restart: unless-stopped
-    networks:
-      - occupify-network
 
-networks:
-  occupify-network:
-    external: true
+  agentic:
+    image: ghcr.io/occupify/occupify-agentic:latest
+    container_name: occupify-agentic
+    restart: on-failure:3
+    depends_on:
+      - postgres-agentic
+      - cv-compiler
+    env_file:
+      - ../../env/agentic.env
+    ports:
+      - "8080:8186"
+
+volumes:
+  postgres_agentic_data:

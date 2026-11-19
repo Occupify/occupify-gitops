@@ -6,10 +6,4 @@ services:
       - ../../env/gateway.env
     ports:
       - "8080:8080"
-    restart: unless-stopped
-    networks:
-      - occupify-network
-
-networks:
-  occupify-network:
-    external: true
+    restart: on-failure:3
