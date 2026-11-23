@@ -1,0 +1,36 @@
+services:
+  postgres-agentic:
+    image: docker.io/pgvector/pgvector:pg16
+    container_name: occupify-postgres-agentic
+    restart: unless-stopped
+    env_file:
+      - ../../env/agentic.env
+    volumes:
+      - postgres_agentic_data:/var/lib/postgresql/data
+
+  cv-compiler:
+    image: ghcr.io/occupify/occupify-cv-compiler:latest
+    container_name: occupify-cv-compiler
+    read_only: true
+    tmpfs: [/tmp:size=256m]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 64
+    mem_limit: 768m
+    cpus: 2
+    restart: unless-stopped
+
+  agentic:
+    image: ghcr.io/occupify/occupify-agentic:latest
+    container_name: occupify-agentic
+    restart: on-failure:3
+    depends_on:
+      - postgres-agentic
+      - cv-compiler
+    env_file:
+      - ../../env/agentic.env
+    ports:
+      - "8080:8186"
+
+volumes:
+  postgres_agentic_data:

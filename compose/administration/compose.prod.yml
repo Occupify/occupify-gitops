@@ -1,0 +1,23 @@
+services:
+  postgres-administration:
+    image: docker.io/library/postgres:16-alpine
+    container_name: occupify-postgres-administration
+    restart: unless-stopped
+    env_file:
+      - ../../env/administration.env
+    volumes:
+      - postgres_admin_data:/var/lib/postgresql/data
+
+  administration:
+    image: ghcr.io/occupify/occupify-administration:latest
+    container_name: occupify-administration
+    restart: on-failure:3
+    depends_on:
+      - postgres-administration
+    env_file:
+      - ../../env/administration.env
+    ports:
+      - "8080:8185"
+
+volumes:
+  postgres_admin_data:

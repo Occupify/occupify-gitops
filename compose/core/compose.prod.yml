@@ -1,0 +1,23 @@
+services:
+  postgres-core:
+    image: docker.io/library/postgres:16-alpine
+    container_name: occupify-postgres-core
+    restart: unless-stopped
+    env_file:
+      - ../../env/core.env
+    volumes:
+      - postgres_core_data:/var/lib/postgresql/data
+
+  core:
+    image: ghcr.io/occupify/occupify-core:latest
+    container_name: occupify-core
+    restart: on-failure:3
+    depends_on:
+      - postgres-core
+    env_file:
+      - ../../env/core.env
+    ports:
+      - "8080:8182"
+
+volumes:
+  postgres_core_data:

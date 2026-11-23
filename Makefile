@@ -1,92 +1,73 @@
-.PHONY: network dns-refresh infra nginx be-gateway be-identity be-core be-payment be-noti be-administration be-agentic be-all
+.PHONY: gateway identity core payment noti administration agentic admin \
+        stop-gateway stop-identity stop-core stop-payment stop-noti stop-administration stop-agentic stop-admin \
+        clean-all
 
-network:
-	@podman network exists occupify-network || podman network create occupify-network
+gateway:
+	@echo ">> Starting Gateway service..."
+	podman compose -f compose/gateway/compose.prod.yml up -d
 
-dns-refresh:
-	@echo ">> Refreshing Aardvark DNS daemon..."
-	@pkill -u "$$(id -u)" aardvark-dns || true
+stop-gateway:
+	@echo ">> Stopping Gateway service..."
+	podman compose -f compose/gateway/compose.prod.yml down
 
-infra: network dns-refresh
-	@echo ">> Ensuring infrastructure is running..."
-	systemctl --user daemon-reload
-	systemctl --user restart occupify-infra
-	@sleep 3
-	@podman ps | grep occupify-postgres || true
+identity:
+	@echo ">> Starting Identity service + Postgres..."
+	podman compose -f compose/identity/compose.prod.yml up -d
 
-nginx:
-	@echo ">> Ensuring Nginx service is running..."
-	systemctl --user daemon-reload
-	systemctl --user restart occupify-nginx
-	@sleep 2
-	systemctl --user status occupify-nginx --no-pager
+stop-identity:
+	@echo ">> Stopping Identity service + Postgres..."
+	podman compose -f compose/identity/compose.prod.yml down
 
-be-gateway: network dns-refresh
-	@echo ">> Pulling occupify-gateway image..."
-	podman pull ghcr.io/occupify/occupify-gateway:latest
-	@echo ">> Triggering Systemd Service for Gateway..."
-	systemctl --user daemon-reload
-	systemctl --user restart occupify-be-gateway
-	@sleep 3
-	@podman ps | grep occupify-gateway || true
+core:
+	@echo ">> Starting Core service + Postgres..."
+	podman compose -f compose/core/compose.prod.yml up -d
 
-be-identity: network dns-refresh
-	@echo ">> Pulling occupify-identity image..."
-	podman pull ghcr.io/occupify/occupify-identity:latest
-	@echo ">> Triggering Systemd Service for Identity..."
-	systemctl --user daemon-reload
-	systemctl --user restart occupify-be-identity
-	@sleep 3
-	@podman ps | grep occupify-identity || true
+stop-core:
+	@echo ">> Stopping Core service + Postgres..."
+	podman compose -f compose/core/compose.prod.yml down
 
-be-core: network dns-refresh
-	@echo ">> Pulling occupify-core image..."
-	podman pull ghcr.io/occupify/occupify-core:latest
-	@echo ">> Triggering Systemd Service for Core..."
-	systemctl --user daemon-reload
-	systemctl --user restart occupify-be-core
-	@sleep 3
-	@podman ps | grep occupify-core || true
+payment:
+	@echo ">> Starting Payment service + Postgres..."
+	podman compose -f compose/payment/compose.prod.yml up -d
 
-be-payment: network dns-refresh
-	@echo ">> Pulling occupify-payment image..."
-	podman pull ghcr.io/occupify/occupify-payment:latest
-	@echo ">> Triggering Systemd Service for Payment..."
-	systemctl --user daemon-reload
-	systemctl --user restart occupify-be-payment
-	@sleep 3
-	@podman ps | grep occupify-payment || true
+stop-payment:
+	@echo ">> Stopping Payment service + Postgres..."
+	podman compose -f compose/payment/compose.prod.yml down
 
-be-noti: network dns-refresh
-	@echo ">> Pulling occupify-noti image..."
-	podman pull ghcr.io/occupify/occupify-noti:latest
-	@echo ">> Triggering Systemd Service for Notification..."
-	systemctl --user daemon-reload
-	systemctl --user restart occupify-be-noti
-	@sleep 3
-	@podman ps | grep occupify-noti || true
+noti:
+	@echo ">> Starting Noti service + Postgres..."
+	podman compose -f compose/noti/compose.prod.yml up -d
 
-be-administration: network dns-refresh
-	@echo ">> Pulling occupify-administration image..."
-	podman pull ghcr.io/occupify/occupify-administration:latest
-	@echo ">> Triggering Systemd Service for Administration..."
-	systemctl --user daemon-reload
-	systemctl --user restart occupify-be-administration
-	@sleep 3
-	@podman ps | grep occupify-administration || true
+stop-noti:
+	@echo ">> Stopping Noti service + Postgres..."
+	podman compose -f compose/noti/compose.prod.yml down
 
-be-agentic: network dns-refresh
-	@echo ">> Pulling occupify-agentic image..."
-	podman pull ghcr.io/occupify/occupify-agentic:latest
-	@echo ">> Pulling occupify-cv-compiler image..."
-	podman pull ghcr.io/occupify/occupify-cv-compiler:latest
-	@echo ">> Triggering Systemd Service for Agentic..."
-	systemctl --user daemon-reload
-	systemctl --user restart occupify-be-agentic
-	@sleep 3
-	@podman ps | grep occupify-agentic || true
-	@podman ps | grep occupify-cv-compiler || true
-	@echo ">> Restarting API Gateway..."
-	podman restart occupify-gateway || true
+admin: administration
 
-be-all: be-gateway be-identity be-core be-payment be-noti be-administration be-agentic
+stop-admin: stop-administration
+
+administration:
+	@echo ">> Starting Administration service + Postgres..."
+	podman compose -f compose/administration/compose.prod.yml up -d
+
+stop-administration:
+	@echo ">> Stopping Administration service + Postgres..."
+	podman compose -f compose/administration/compose.prod.yml down
+
+agentic:
+	@echo ">> Starting Agentic service + Postgres + CV Compiler..."
+	podman compose -f compose/agentic/compose.prod.yml up -d
+
+stop-agentic:
+	@echo ">> Stopping Agentic service + Postgres + CV Compiler..."
+	podman compose -f compose/agentic/compose.prod.yml down
+
+clean-all:
+	@echo ">> Cleaning all compose services..."
+	podman compose -f compose/gateway/compose.prod.yml down 2>/dev/null || true
+	podman compose -f compose/identity/compose.prod.yml down 2>/dev/null || true
+	podman compose -f compose/core/compose.prod.yml down 2>/dev/null || true
+	podman compose -f compose/payment/compose.prod.yml down 2>/dev/null || true
+	podman compose -f compose/noti/compose.prod.yml down 2>/dev/null || true
+	podman compose -f compose/administration/compose.prod.yml down 2>/dev/null || true
+	podman compose -f compose/agentic/compose.prod.yml down 2>/dev/null || true
